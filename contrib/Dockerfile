@@ -22,36 +22,43 @@ RUN mkdir tulip
 
 WORKDIR /tulip
 
-#download tulip source code
+#download most recent branch of tulip source code
 RUN git clone --depth=1 --single-branch -b tulip_5_1_0 https://github.com/Tulip-Dev/tulip tulip-src
 
 RUN mkdir /tulip/tulip-src/build
 
 WORKDIR /tulip/tulip-src/build
 
-#compile and install tulip
+#write makefile, compile in parallel and install
 RUN cmake .. && make -j 4 && make install
 
+#download re2 source code
 RUN git clone --depth=1 https://github.com/google/re2.git /re2
 
 WORKDIR	/re2
 
+#compile in parallel and install
 RUN make -j 4 && make install
 
+#download libibautils source code
 RUN git clone --depth=1 https://github.com/nateucar/libibautils.git /libibautils
 
 RUN mkdir /libibautils/build
 
 WORKDIR /libibautils/build
 
+#write makefile, compile in parallel and install
 RUN cmake .. && make -j 4 && make install
 
+#download tulip_infiniband source code
 RUN git clone --depth=1 https://github.com/nateucar/tulip_infiniband.git /tulip_infiniband
 
 RUN mkdir /tulip_infiniband/build
 
 WORKDIR /tulip_infiniband/build
 
+#write makefile, compile in parallel and install
 RUN cmake -DCMAKE_MODULE_PATH="/tulip/tulip-src/cmake;/tulip_infiniband" -DCMAKE_BUILD_TYPE=Release /tulip_infiniband && make -j 4 && make install
 
+#run tulip
 CMD /usr/local/bin/tulip
