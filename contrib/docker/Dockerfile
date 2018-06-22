@@ -54,4 +54,4 @@ WORKDIR /tulip_infiniband/build
 
 RUN cmake -DCMAKE_MODULE_PATH="/tulip/tulip-src/cmake;/tulip_infiniband" -DCMAKE_BUILD_TYPE=Release /tulip_infiniband && make -j 4 && make install
 
-CMD /usr/local/bin/tulip
+CMD /usr/local/bin/tulip &
