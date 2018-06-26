@@ -33,6 +33,7 @@ WORKDIR /tulip/tulip-src/build
 RUN cmake .. && make -j 4 && make install
 
 #download re2 source code
+
 RUN git clone --depth=1 https://github.com/google/re2.git /re2
 
 WORKDIR	/re2
@@ -58,6 +59,10 @@ RUN mkdir /tulip_infiniband/build
 WORKDIR /tulip_infiniband/build
 
 #write makefile, compile in paralled and install tulip_infiniband
-RUN cmake -DCMAKE_MODULE_PATH="/tulip/tulip-src/cmake;/tulip_infiniband" -DCMAKE_BUILD_TYPE=Release /tulip_infiniband && make -j 4 && make install
+RUN cmake -DCMAKE_MODULE_PATH="/tulip/tulip-src/cmake;/tulip_infiniband" \
+	-DCMAKE_BUILD_TYPE=Release /tulip_infiniband && make -j 4 && make install
 
-CMD /usr/local/bin/tulip
+CMD env LD_LIBRARY_PATH=/usr/local/lib/tulip/:/usr/local/lib:$LD_LIBRARY_PATH tulip
+
+
+
