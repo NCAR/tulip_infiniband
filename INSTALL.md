@@ -29,9 +29,9 @@ make install
 ```
 sudo apt-get install build-essential git python subversion cmake cmake-curses-gui libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng-dev doxygen libxml2-dev qt4-dev-tools python-dev python-sphinx libqhull-dev libyajl-dev libquazip-dev libqtwebkit-dev graphviz binutils-dev libcanberra-gtk-dev
 ```
-* Compile and install Tulip.
+* Download, compile and install the latest version of Tulip.
 ```
-svn checkout svn://svn.code.sf.net/p/auber/code/tulip tulip-src
+git clone --depth=1 --single-branch -b tulip_5_1_0 https://github.com/Tulip-Dev/tulip tulip-src
 cd tulip-src
 mkdir build
 cd build
@@ -39,14 +39,14 @@ cmake ..
 make
 sudo make install
 ```
-*  Compile and install Googles RE2
+* Download, compile and install Googles RE2
 ```
 git clone https://github.com/google/re2.git re2
 cd re2
 make
 sudo make install
 ```
-* Compile and install libibautils
+* Download, compile and install libibautils
 ```
 git clone https://github.com/nateucar/libibautils.git libibautils
 mkdir libibautils/build
@@ -55,7 +55,7 @@ cmake ..
 make
 sudo make install
 ```
-* Compile and install Infinband Plugins into Tulip
+* Download, compile and install Infinband Plugins into Tulip
 ```
 git clone https://github.com/nateucar/tulip_infiniband.git tulip_infiniband
 mkdir tulip_infiniband/build
