@@ -18,49 +18,47 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	libyajl-dev libquazip-dev libqtwebkit-dev graphviz \
 	binutils-dev libcanberra-gtk-dev
 
-RUN mkdir tulip
-
-WORKDIR /tulip
+RUN mkdir /src
 
 #download most recent branch of tulip source code
-RUN git clone --depth=1 --single-branch -b tulip_5_1_0 https://github.com/Tulip-Dev/tulip tulip-src
+RUN git clone --depth=1 --single-branch -b tulip_5_1_0 https://github.com/Tulip-Dev/tulip /src/tulip
 
-RUN mkdir /tulip/tulip-src/build
+RUN mkdir /src/tulip/build
 
-WORKDIR /tulip/tulip-src/build
+WORKDIR /src/tulip/build
 
 #write makefile, compile in parallel and install tulip
 RUN cmake .. && make -j 4 && make install
 
 #download re2 source code
 
-RUN git clone --depth=1 https://github.com/google/re2.git /re2
+RUN git clone --depth=1 https://github.com/google/re2.git /src/re2
 
-WORKDIR	/re2
+WORKDIR	/src/re2
 
 #compile in parallel and install re2
 RUN make -j 4 && make install
 
 #download libibautils source code
-RUN git clone --depth=1 https://github.com/nateucar/libibautils.git /libibautils
+RUN git clone --depth=1 https://github.com/nateucar/libibautils.git /src/libibautils
 
-RUN mkdir /libibautils/build
+RUN mkdir /src/libibautils/build
 
-WORKDIR /libibautils/build
+WORKDIR /src/libibautils/build
 
 #write makefile, compile in parallel and install libibautils
 RUN cmake .. && make -j 4 && make install
 
 #download tulip_infiniband source code
-RUN git clone --depth=1 https://github.com/nateucar/tulip_infiniband.git /tulip_infiniband
+RUN git clone --depth=1 https://github.com/nateucar/tulip_infiniband.git /src/tulip_infiniband
 
-RUN mkdir /tulip_infiniband/build
+RUN mkdir /src/tulip_infiniband/build
 
-WORKDIR /tulip_infiniband/build
+WORKDIR /src/tulip_infiniband/build
 
 #write makefile, compile in paralled and install tulip_infiniband
-RUN cmake -DCMAKE_MODULE_PATH="/tulip/tulip-src/cmake;/tulip_infiniband" \
-	-DCMAKE_BUILD_TYPE=Release /tulip_infiniband && make -j 4 && make install
+RUN cmake -DCMAKE_MODULE_PATH="/src/tulip/cmake;/src/tulip_infiniband" \
+	-DCMAKE_BUILD_TYPE=Release /src/tulip_infiniband && make -j 4 && make install
 
 CMD env LD_LIBRARY_PATH=/usr/local/lib/tulip/:/usr/local/lib:$LD_LIBRARY_PATH tulip
 
