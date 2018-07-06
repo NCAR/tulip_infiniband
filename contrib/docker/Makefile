@@ -4,8 +4,9 @@ RUN_ARGS        ?= docker run --network=host --cap-add=SYS_PTRACE --security-opt
 	-it --log-driver=syslog -h $(DOCKER_TAG) -v /dev/log:/dev/log --name $(DOCKER_TAG) \
 	-v /tmp/.X11-unix:/tmp/.X11-unix -v /home:/home -v $(XAUTHORITY):$(XAUTHORITY) \
 	-e DISPLAY=unix$(DISPLAY) -e XAUTHORITY=$(XAUTHORITY)
-BUILD_ARGS      ?= --rm  
-        
+BUILD_ARGS      ?= --rm 
+UNAME = $(shell uname)
+
 default: run
 
 build:  
@@ -23,7 +24,14 @@ nocache:
 clean: nocache build
 
 run: build stop
+ifeq ($(UNAME),Linux)
 	$(RUN_ARGS) -d --restart unless-stopped $(DOCKER_TAG)
+else ifeq ($(UNAME),Darwin)
+	xhost + $(shell ifconfig en0 | grep inet | awk '$$1=="inet" {print $$2}')
+	docker run --name tulip -e \
+	DISPLAY=$(shell ifconfig en0 | grep inet | awk '$$1=="inet" {print $$2}'):0 \
+	-v /tmp/.X11-unix:/tmp/.X11-unix tulip
+endif
 
 debug: build stop
 	$(RUN_ARGS) --rm $(DOCKER_TAG)
