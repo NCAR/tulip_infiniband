@@ -7,10 +7,9 @@
   * https://github.com/google/re2
 * cmake
 * c++ compiler
-* all prerequistes for Tulip
+* all prerequisites for Tulip
 
 # Reference
-
 http://tulip.labri.fr/Documentation/current/tulip-dev/html/tulip_tutorial.html
 
 # Install Procedure
@@ -24,7 +23,7 @@ make
 make install
 ```
 
-# Example: Compelete install on Ubuntu 18.04 host including Tulip
+# Example: Compelete install on Ubuntu 18.04 host
 * Install prerequisites for Tulip
 ```
 sudo apt-get install build-essential git python subversion cmake cmake-curses-gui libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng-dev doxygen libxml2-dev qt4-dev-tools python-dev python-sphinx libqhull-dev libyajl-dev libquazip-dev libqtwebkit-dev graphviz binutils-dev libcanberra-gtk-dev
