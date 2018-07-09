@@ -14,15 +14,12 @@ make
 ```
 
 ## Example: Complete install and run on Ubuntu 18.04 host
-* Install gcc
+* Install gcc (example given for Ubuntu)
 ```
 sudo apt-get install -y build-essential
 ```
-* Install Docker for Linux
-```
-sudo apt install -y docker-ce
-```
-* Build and run Tulip container 
+# [Install Docker for Linux](https://docs.docker.com/install/linux/docker-ce/)
+# Build and run Tulip container 
 (must be in <...>/tulip_infiniband/contrib/docker)
 ```
 make
