@@ -42,9 +42,11 @@ make
 ```
 xcode-select --install
 ```
-* Install Docker for Mac
+* Install Docker for Mac from [Docker's website](https://store.docker.com/editions/community/docker-ce-desktop-mac)
+
+* Open Docker
 ```
-brew install docker
+open -a docker
 ```
 * Install XQuartz
 ```
