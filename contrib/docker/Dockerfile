@@ -50,7 +50,7 @@ WORKDIR /src/libibautils/build
 RUN cmake .. && make -j 4 && make install
 
 #download tulip_infiniband source code
-RUN git clone --depth=1 https://github.com/nateucar/tulip_infiniband.git /src/tulip_infiniband
+RUN git clone --depth=1 -b=make-update https://github.com/toddyoder/tulip_infiniband.git /src/tulip_infiniband
 
 RUN mkdir /src/tulip_infiniband/build
 
