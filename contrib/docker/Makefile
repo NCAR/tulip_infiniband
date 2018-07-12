@@ -7,16 +7,22 @@ else ifeq ($(shell uname),Darwin)
 	OS=Mac
 endif
 
+ifneq ($(shell ipconfig getifaddr en0),)
+	IP=$(shell ipconfig getifaddr en0)
+else
+	IP=$(shell ipconfig getifaddr en1)
+endif
+
 ifeq ($(OS),Linux)
 	RUN_ARGS ?= docker run --network=host --cap-add=SYS_PTRACE --security-opt=apparmor:unconfined \
 	-it --log-driver=syslog -h $(DOCKER_TAG) -v /dev/log:/dev/log --name $(DOCKER_TAG) \
 	-v /tmp/.X11-unix:/tmp/.X11-unix -v /home:/home -v $(XAUTHORITY):$(XAUTHORITY) \
 	-e DISPLAY=unix$(DISPLAY) -e XAUTHORITY=$(XAUTHORITY)
 else ifeq ($(OS),Mac)
-	RUN_ARGS ?= xhost + $(shell ifconfig en1 | grep inet | awk '$$1=="inet" {print $$2}'); \
+	RUN_ARGS ?= xhost + $(IP); \
 	docker run --network=host --cap-add=SYS_PTRACE --security-opt=apparmor:unconfined \
 	-it -h $(DOCKER_TAG) --name $(DOCKER_TAG) \
-	-e DISPLAY=$(shell ifconfig en1 | grep inet | awk '$$1=="inet" {print $$2}'):0 \
+	-e DISPLAY=$(IP):0 \
 	-v /tmp/.X11-unix:/tmp/.X11-unix
 endif
 
