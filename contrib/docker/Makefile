@@ -1,7 +1,7 @@
 DOCKER_TAG      ?= tulip
 DEBRELEASE      ?= stretch
 BUILD_ARGS      ?= --rm 
-# Possible user-defined variable declaring which network interface to use for Mac
+# Optional user-defined variable declaring which network interface to use for Mac
 ETHDEV		:=
 
 # Determine operating system
