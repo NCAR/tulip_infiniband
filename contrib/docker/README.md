@@ -59,5 +59,5 @@ brew cask install xquartz
 make
 ```
 --------------------------------------------------------
-# Windows not yet supported
+# Windows not yet tested
 
