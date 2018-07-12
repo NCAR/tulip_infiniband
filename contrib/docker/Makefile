@@ -1,6 +1,8 @@
 DOCKER_TAG      ?= tulip
 DEBRELEASE      ?= stretch
 BUILD_ARGS      ?= --rm 
+# Possible user-defined variable declaring which network interface to use for Mac
+ETHDEV		:=
 
 # Determine operating system
 ifeq ($(shell uname),Linux)
@@ -9,14 +11,20 @@ else ifeq ($(shell uname),Darwin)
 	OS=Mac
 endif
 
-# Get the ip address, using en0 if using wireless internet, en1 otherwise.
-ifneq ($(shell ipconfig getifaddr en0),)
-	IP=$(shell ipconfig getifaddr en0)
-else
-	IP=$(shell ipconfig getifaddr en1)
+# For Mac, determine whether using en0 or en1, unless specified by user
+ifeq ($(OS),Mac)
+	ifndef ETHDEV
+		ifneq ($(shell ipconfig getifaddr en0),)
+			ETHDEV=en0
+		else
+			ETHDEV=en1
+		endif
+	endif
+	# Get the ip address
+	IP=$(shell ipconfig getifaddr $(ETHDEV))
 endif
 
-# Define appropriate arguments for the docker run depending on the os.
+# Define appropriate arguments for the docker run depending on the operating system.
 ifeq ($(OS),Linux)
 	RUN_ARGS ?= docker run --network=host --cap-add=SYS_PTRACE --security-opt=apparmor:unconfined \
 	-it --log-driver=syslog -h $(DOCKER_TAG) -v /dev/log:/dev/log --name $(DOCKER_TAG) \

@@ -36,6 +36,7 @@ make
 ```
 make
 ```
+If a specific network interface is desired, define ETHDEV in the make call. For example: make ETHDEV=en1 debug
 
 ## Example: Complete install and run on macOS 10.12.6 host
 * Install gcc
