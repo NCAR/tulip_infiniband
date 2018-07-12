@@ -72,3 +72,4 @@ help:
 	@echo build:  "\t"  Builds the Tulip container
 	@echo stop:   "\t"  Stops the Tulip container and removes the container files from the host system
 	@echo clean:  "\t"  Builds and runs Tulip from scratch. Does not use the cache. This takes a long time
+
