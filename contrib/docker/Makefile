@@ -46,7 +46,7 @@ build:
 		--build-arg DEBRELEASE=$(DEBRELEASE) \
 		--network=host -t $(DOCKER_TAG) .
 
-stop:  
+stop:
 	docker stop $(DOCKER_TAG) || true
 	docker rm $(DOCKER_TAG) || true
 
@@ -55,7 +55,7 @@ nocache:
 
 clean: nocache build
 
-run: build stop
+run: build stop	
 	$(RUN_ARGS) -d --restart unless-stopped $(DOCKER_TAG)
 
 debug: build stop
@@ -63,3 +63,13 @@ debug: build stop
 
 bash: build stop
 	$(RUN_ARGS) --rm $(DOCKER_TAG) /bin/bash
+
+help: 
+	@echo Execute '"make <target>"' for specific options within the makefile. Targets are described below. The default is run
+	@echo run:    "\t"  Builds and runs Tulip. Restarts the GUI until process is stopped or the window is closed with the close button
+	@echo debug:  "\t"  Builds and runs Tulip while forwarding any standard output to the terminal
+	@echo bash:   "\t"  Builds the Tulip container but does not run the GUI. User is placed in the container in the terminal
+	@echo build:  "\t"  Builds the Tulip container
+	@echo stop:   "\t"  Stops the Tulip container and removes the container files from the host system
+	@echo clean:  "\t"  Builds and runs Tulip from scratch. Does not use the cache. This takes a long time
+
