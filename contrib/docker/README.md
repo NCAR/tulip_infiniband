@@ -36,15 +36,18 @@ make
 ```
 make
 ```
+If a specific network interface is desired, define ETHDEV in the make call. For example: make ETHDEV=en1 debug
 
 ## Example: Complete install and run on macOS 10.12.6 host
 * Install gcc
 ```
 xcode-select --install
 ```
-* Install Docker for Mac
+* Install Docker for Mac from [Docker's website](https://store.docker.com/editions/community/docker-ce-desktop-mac)
+
+* Open Docker
 ```
-brew install docker
+open -a docker
 ```
 * Install XQuartz
 ```
