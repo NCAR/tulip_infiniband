@@ -1,18 +1,22 @@
 DOCKER_TAG      ?= tulip
 DEBRELEASE      ?= stretch
 BUILD_ARGS      ?= --rm 
+
+# Determine operating system
 ifeq ($(shell uname),Linux)
 	OS=Linux
 else ifeq ($(shell uname),Darwin)
 	OS=Mac
 endif
 
+# Get the ip address, using en0 if using wireless internet, en1 otherwise.
 ifneq ($(shell ipconfig getifaddr en0),)
 	IP=$(shell ipconfig getifaddr en0)
 else
 	IP=$(shell ipconfig getifaddr en1)
 endif
 
+# Define appropriate arguments for the docker run depending on the os.
 ifeq ($(OS),Linux)
 	RUN_ARGS ?= docker run --network=host --cap-add=SYS_PTRACE --security-opt=apparmor:unconfined \
 	-it --log-driver=syslog -h $(DOCKER_TAG) -v /dev/log:/dev/log --name $(DOCKER_TAG) \
@@ -26,6 +30,7 @@ else ifeq ($(OS),Mac)
 	-v /tmp/.X11-unix:/tmp/.X11-unix
 endif
 
+# Define makefile targets
 default: run
 
 build:  
