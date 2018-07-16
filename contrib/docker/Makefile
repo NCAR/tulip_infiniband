@@ -65,7 +65,7 @@ bash: build stop
 	$(RUN_ARGS) --rm $(DOCKER_TAG) /bin/bash
 
 help: 
-	@echo Execute '"make <target>"' for specific options within the makefile. Targets are described below. The default is run
+	@echo Execute '"make <target>"' for specific options within the makefile. Targets are described below. The default is run. If a specific network interface is desired, define ETHDEV in the make call. For example: make ETHDEV=en1 debug.
 	@echo run:    "\t"  Builds and runs Tulip. Restarts the GUI until process is stopped or the window is closed with the close button
 	@echo debug:  "\t"  Builds and runs Tulip while forwarding any standard output to the terminal
 	@echo bash:   "\t"  Builds the Tulip container but does not run the GUI. User is placed in the container in the terminal
