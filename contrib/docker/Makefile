@@ -1,5 +1,5 @@
 DOCKER_TAG      ?= tulip
-DEBRELEASE      ?= stretch
+DEBRELEASE	?= stretch
 BUILD_ARGS      ?= --rm 
 # Optional user-defined variable declaring which network interface to use for Mac
 ETHDEV		:=
@@ -11,17 +11,25 @@ else ifeq ($(shell uname),Darwin)
 	OS=Mac
 endif
 
-# For Mac, determine whether using en0 or en1, unless specified by user
+# For Mac, determine which network interface to use, unless specified by user
 ifeq ($(OS),Mac)
 	ifndef ETHDEV
 		ifneq ($(shell ipconfig getifaddr en0),)
 			ETHDEV=en0
-		else
+		else ifneq ($(shell ipconfig getifaddr en1),)
 			ETHDEV=en1
+		else ifneq ($(shell ipconfig getifaddr en2),)
+			ETHDEV=en2
+		else ifneq ($(shell ipconfig getifaddr en3),)
+			ETHDEV=en3
 		endif
 	endif
 	# Get the ip address
 	IP=$(shell ipconfig getifaddr $(ETHDEV))
+# Define error message if no ip address can be found
+	ifeq ($(IP),)
+		$(error Error, no ip address found)
+	endif
 endif
 
 # Define appropriate arguments for the docker run depending on the operating system.
@@ -41,7 +49,14 @@ endif
 # Define makefile targets
 default: run
 
-build:  
+compat:
+ifeq ($(OS),Mac)
+ifndef IP
+	exit 1
+endif 
+endif
+
+build: compat
 	docker build $(BUILD_ARGS) \
 		--build-arg DEBRELEASE=$(DEBRELEASE) \
 		--network=host -t $(DOCKER_TAG) .
@@ -55,7 +70,7 @@ nocache:
 
 clean: nocache build
 
-run: build stop	
+run: build stop
 	$(RUN_ARGS) -d --restart unless-stopped $(DOCKER_TAG)
 
 debug: build stop
@@ -65,7 +80,7 @@ bash: build stop
 	$(RUN_ARGS) --rm $(DOCKER_TAG) /bin/bash
 
 help: 
-	@echo Execute '"make <target>"' for specific options within the makefile. Targets are described below. The default is run
+	@echo Execute '"make <target>"' for specific options within the makefile. Targets are described below. The default is run. If a specific network interface is desired, define ETHDEV in the make call. For example: make ETHDEV=en1 debug.
 	@echo run:    "\t"  Builds and runs Tulip. Restarts the GUI until process is stopped or the window is closed with the close button
 	@echo debug:  "\t"  Builds and runs Tulip while forwarding any standard output to the terminal
 	@echo bash:   "\t"  Builds the Tulip container but does not run the GUI. User is placed in the container in the terminal
