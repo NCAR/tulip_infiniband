@@ -15,7 +15,7 @@ http://tulip.labri.fr/Documentation/current/tulip-dev/html/tulip_tutorial.html
 # Install Procedure
 * Use Cmake to configure
 ```
-cmake -DCMAKE_MODULE_PATH="<path to Tulip source code/cmake>;<path to Infiniband directory>" -DCMAKE_BUILD_TYPE=Release <path to Infiniband directory>
+cmake -DCMAKE_MODULE_PATH="<path to Tulip source code/cmake>;<path to Infiniband directory>" -DCMAKE_BUILD_TYPE=Debug <path to Infiniband directory>
 ```
 * Compile and install
 ```
@@ -34,7 +34,7 @@ git clone --depth=1 --single-branch -b tulip_5_1_0 https://github.com/Tulip-Dev/
 cd tulip-src
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 make
 sudo make install
 ```
@@ -50,7 +50,7 @@ sudo make install
 git clone https://github.com/nateucar/libibautils.git libibautils
 mkdir libibautils/build
 cd libibautils/build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 make
 sudo make install
 ```
@@ -59,7 +59,7 @@ sudo make install
 git clone https://github.com/nateucar/tulip_infiniband.git tulip_infiniband
 mkdir tulip_infiniband/build
 cd tulip_infiniband/build
-cmake -DCMAKE_MODULE_PATH="<path to tulip-src>/cmake;.." -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_MODULE_PATH="<path to tulip-src>/cmake;.." -DCMAKE_BUILD_TYPE=Debug ..
 make
 sudo make install
 ```
