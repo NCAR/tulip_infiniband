@@ -9,6 +9,8 @@ ifeq ($(shell uname),Linux)
 	OS=Linux
 else ifeq ($(shell uname),Darwin)
 	OS=Mac
+else
+$(error Error, only compatable with Linux and Mac)
 endif
 
 # For Mac, determine which network interface to use, unless specified by user
@@ -27,9 +29,9 @@ ifeq ($(OS),Mac)
 	# Get the ip address
 	IP=$(shell ipconfig getifaddr $(ETHDEV))
 # Define error message if no ip address can be found
-	ifeq ($(IP),)
-		$(error Error, no ip address found)
-	endif
+ifeq ($(IP),)
+$(error Error, no ip address found)
+endif
 endif
 
 # Define appropriate arguments for the docker run depending on the operating system.
@@ -49,14 +51,7 @@ endif
 # Define makefile targets
 default: run
 
-compat:
-ifeq ($(OS),Mac)
-ifndef IP
-	exit 1
-endif 
-endif
-
-build: compat
+build:
 	docker build $(BUILD_ARGS) \
 		--build-arg DEBRELEASE=$(DEBRELEASE) \
 		--network=host -t $(DOCKER_TAG) .
