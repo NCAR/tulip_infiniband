@@ -61,6 +61,3 @@ RUN cmake -DCMAKE_MODULE_PATH="/src/tulip/cmake;/src/tulip_infiniband" \
 	-DCMAKE_BUILD_TYPE=D /src/tulip_infiniband && make -j 4 && make install
 
 CMD env LD_LIBRARY_PATH=/usr/local/lib/tulip/:/usr/local/lib:$LD_LIBRARY_PATH tulip
-
-
-
