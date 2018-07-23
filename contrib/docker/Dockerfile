@@ -20,7 +20,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 RUN mkdir /src
 
-#download most recent branch of tulip source code from github repository
+#download most recent branch of tulip source code
 RUN git clone --depth=1 --single-branch -b tulip_5_1_0 https://github.com/Tulip-Dev/tulip /src/tulip
 
 RUN mkdir /src/tulip/build
@@ -30,7 +30,7 @@ WORKDIR /src/tulip/build
 #write makefile, compile in parallel and install tulip
 RUN cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j 4 && make install
 
-#download re2 source code from github repository
+#download re2 source code 
 RUN git clone --depth=1 https://github.com/google/re2.git /src/re2
 
 WORKDIR	/src/re2
@@ -38,7 +38,7 @@ WORKDIR	/src/re2
 #compile in parallel and install re2
 RUN make -j 4 && make install
 
-#download libibautils source code from github repository
+#download libibautils source code 
 RUN git clone --depth=1 https://github.com/nateucar/libibautils.git /src/libibautils
 
 RUN mkdir /src/libibautils/build
@@ -48,7 +48,7 @@ WORKDIR /src/libibautils/build
 #write makefile, compile in parallel and install libibautils
 RUN cmake -DCMAKE_BUILD_TYPE=Debug .. && make -j 4 && make install
 
-#download tulip_infiniband source code from github repository
+#download tulip_infiniband source code 
 RUN git clone --depth=1 https://github.com/nateucar/tulip_infiniband.git /src/tulip_infiniband
 
 RUN mkdir /src/tulip_infiniband/build
