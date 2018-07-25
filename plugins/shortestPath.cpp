@@ -114,6 +114,7 @@ const tlp::node & shortestPath::find_node(unsigned int id){
 
     itnodes = graph->getNodes();
     const tlp::node &temp = itnodes->next();
+    delete itnodes;
     return temp;
 }
 
@@ -158,6 +159,7 @@ bool shortestPath::run()
          
        path_node[path_id++] = mynode.id;
     }
+    delete selections;
 
     //If less than two nodes are selected show an error
     if(path_id <= 1)
@@ -208,6 +210,8 @@ bool shortestPath::run()
             }
         }
     }
+    delete itnodes;
+    
     for(unsigned int i = 0; i<mypath.size()-1; i++){
         const tlp::node &source = find_node(mypath[i]);
         tlp::Iterator<tlp::edge> *itedges = graph->getOutEdges(source);
@@ -216,6 +220,7 @@ bool shortestPath::run()
             if(graph->target(edge).id == mypath[i+1])
                 selectBool->setEdgeValue(edge, true);
         }
+        delete itedges;
     }
     
         if(pluginProgress)

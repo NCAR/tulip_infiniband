@@ -124,12 +124,14 @@ bool randomNodes::run()
         else
             pick->setNodeValue(mynode,false);
     }
+    delete itnodes;
     
     //Deselect all edges
     while(itedges->hasNext()){
         const tlp::edge &myedge = itedges->next();
         pick->setEdgeValue(myedge,false);
     }
+    delete itedges;
     
     if(pluginProgress)
     {

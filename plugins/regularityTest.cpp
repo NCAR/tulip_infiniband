@@ -78,6 +78,7 @@ bool regularityTest::run()
         }
         i++;
     }
+    delete itnodes;
     
     //Print result to output
     if(irreg)
