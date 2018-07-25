@@ -58,8 +58,8 @@ bool regularityTest::run()
     //Variable to indicate two equal node degrees
     bool irreg = true;
     
-    //Variable to store the first node's degrees
-    unsigned int deg;
+    //Array to store each node's degree
+    unsigned int deg[v];
     
     //Iterator for all nodes in graph
     tlp::Iterator<tlp::node> *itnodes = graph->getNodes();
@@ -67,24 +67,23 @@ bool regularityTest::run()
     //Iteration counter
     unsigned int i = 0;
     
-    while(itnodes->hasNext() && reg){
-        const tlp::node &node = itnodes->next(); //Iterate nodes
-        if(i==0)
-            deg = graph->deg(node); //Set deg as degree of the first node
-        else if(graph->deg(node) != deg) 
-            reg = false; //quit loop if degree doesn't match deg
+    while(itnodes->hasNext()){
+        const tlp::node &currentNode = itnodes->next(); //Iterate nodes
+            deg[i] = graph->deg(currentNode); //Store degree of each node
+        if(graph->deg(currentNode) != deg[0]) 
+            reg = false; //not regular if any two degrees don't match
+        for(int j=0; j<i; j++){ //compare node's degree to all previous nodes' degrees
+            if(graph->deg(currentNode) == deg[j]) 
+                irreg = false; //not irregular if any two degrees match
+        }
         i++;
     }
-    
-    //No nontrivial graph is irregular
-    if(v>1)
-        irreg = false;
     
     //Print result to output
     if(irreg)
         std::cout << "Graph is irregular." << std::endl;
     else if(reg)
-        std::cout << "Graph is " << deg << "-regular." << std::endl;
+        std::cout << "Graph is " << deg[0] << "-regular." << std::endl;
     else
         std::cout << "Graph is neither regular nor irregular." << std::endl;
     
