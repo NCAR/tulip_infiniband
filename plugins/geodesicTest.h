@@ -29,6 +29,8 @@
 #ifndef GEODESIC_TEST_H
 #define GEODESIC_TEST_H
 
+using namespace tlp;
+using namespace std;
 
 class geodesicTest: public tlp::Algorithm{
 public:
@@ -48,8 +50,7 @@ public:
 //It would be better to call that plugin and use its output
 //
 
-    
-//Declaration of adjacency matrix
+    //Declaration of adjacency matrix
     class nodes_map{
     private:
         int v; //number of nodes in graph;
@@ -73,7 +74,7 @@ public:
         };
 
     //Constructor
-    nodes_map(const tlp::Graph *graph, int v){
+    nodes_map(const Graph *graph, int v){
         initMap(graph, v);
     }
 
@@ -83,7 +84,7 @@ public:
     }
 
     //Initialize adjacency matrix
-    void initMap(const tlp::Graph *graph, int v){
+    void initMap(const Graph *graph, int v){
         this->v = v;
         adjacent_matrix = new int* [v];
         for(int i = 0; i<v; i++){
@@ -98,9 +99,9 @@ public:
         }
 
         //Fill adjacency matrix
-        tlp::Iterator<tlp::edge> *ite = graph->getEdges();
+        tlp::Iterator<edge> *ite = graph->getEdges();
         while(ite->hasNext()){
-            tlp::edge e = ite->next();
+            edge e = ite->next();
             int s = graph->source(e).id, t = graph->target(e).id;
             if(!adjacent_matrix[s][t]){
                 adjacent_matrix[s][t] = 1;
@@ -111,18 +112,21 @@ public:
 
 //Dijkstra Algorithm
     //Calculate minimum distance between two nodes
-    int min_distance(std::map<int, myNode*> map1, bool visited[]);
+    int min_distance(map<int, myNode*> map1, bool visited[]);
     
     //Apply Dijkstra's algorithm to entire graph
-    std::map<int,myNode*> dijkstra(int src);
+    map<int,myNode*> dijkstra(int src);
 
     //Trace the path in Tulip
-    std::vector<unsigned int> tracePath(std::map<int, myNode*> distmap, int target,int src);
+    vector<unsigned int> tracePath(map<int, myNode*> distmap, int target,int src);
     };
     
 //Return a node from its id
     const tlp::node & find_node(unsigned int id);
     
+    
+    
+
     
 //Main function
     bool run();
