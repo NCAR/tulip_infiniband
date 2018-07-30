@@ -27,9 +27,8 @@
 #include <tulip/GlScene.h>
 #include <tulip/GraphIterator.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/ColorProperty.h>
 
-#include "shortestPath.h"
+#include "lengthBetween.h"
 
 #include "fabric.h"
 #include "ibautils/ib_fabric.h"
@@ -39,15 +38,15 @@
 using namespace tlp;
 using namespace std;
 
-PLUGIN(shortestPath)
+PLUGIN(lengthBetween)
 
-shortestPath::shortestPath(tlp::PluginContext* context)
+lengthBetween::lengthBetween(tlp::PluginContext* context)
         : tlp::Algorithm(context)
 {
 }
 
 //Find minimum distance between two nodes
-int shortestPath::nodes_map::min_distance(map<int, shortestPath::nodes_map::myNode*> map1, bool visited[]){
+int lengthBetween::nodes_map::min_distance(map<int, lengthBetween::nodes_map::myNode*> map1, bool visited[]){
     int min = INT_MAX;
     int min_index = 0;
 
@@ -60,12 +59,12 @@ int shortestPath::nodes_map::min_distance(map<int, shortestPath::nodes_map::myNo
 }
 
 //Dijkstra algorithm
-map<int,shortestPath::nodes_map::myNode*> shortestPath::nodes_map::dijkstra(int src) {
-    map<int, shortestPath::nodes_map::myNode*> distmap;
+map<int,lengthBetween::nodes_map::myNode*> lengthBetween::nodes_map::dijkstra(int src) {
+    map<int, lengthBetween::nodes_map::myNode*> distmap;
     bool visited[v];
 
     for (int i = 0; i < v; i++) {
-        distmap[i] = new shortestPath::nodes_map::myNode(i, INT_MAX);
+        distmap[i] = new lengthBetween::nodes_map::myNode(i, INT_MAX);
         visited[i] = false;
     }
     distmap[src]->setDist(0);
@@ -87,7 +86,7 @@ map<int,shortestPath::nodes_map::myNode*> shortestPath::nodes_map::dijkstra(int 
     return distmap;
 }
 
-vector<unsigned int> shortestPath::nodes_map::tracePath(map<int, shortestPath::nodes_map::myNode*> distmap, int target, int src){
+vector<unsigned int> lengthBetween::nodes_map::tracePath(map<int, lengthBetween::nodes_map::myNode*> distmap, int target, int src){
     vector<unsigned int> path;
     unsigned int pos = target;
     for(int i = 0; i<v-1; i++){
@@ -103,7 +102,7 @@ vector<unsigned int> shortestPath::nodes_map::tracePath(map<int, shortestPath::n
 }
 
 //Find node from its id
-const tlp::node & shortestPath::find_node(unsigned int id){
+const tlp::node & lengthBetween::find_node(unsigned int id){
     tlp::Iterator<tlp::node> *itnodes = graph->getNodes();
 
     while(itnodes->hasNext()){
@@ -119,11 +118,11 @@ const tlp::node & shortestPath::find_node(unsigned int id){
 }
 
 //Tulip's main function
-bool shortestPath::run()
+bool lengthBetween::run()
 {
     assert(graph);
 
-    static const size_t STEPS = 5;
+    static const size_t STEPS = 4;
      //PluginProcess interacts with users as the plugin runs
     
     if(pluginProgress)
@@ -141,7 +140,7 @@ bool shortestPath::run()
     //Get an iterator to access all the selected nodes
     tlp::Iterator<node> *selections = selectBool->getNodesEqualTo(true,NULL);
 
-    int path_node[2]; //an array to store node and destination node ids
+    int path_node[2]; //an array to store source and destination node ids
     path_node[0]=0; // Default source node is 0
     int path_id = 0;
 
@@ -178,7 +177,7 @@ bool shortestPath::run()
 
     //Apply Dijkstra's algorithm from source node
     nodes_map *graphAnalysis = new nodes_map(graph,v);
-    map<int, shortestPath::nodes_map::myNode*> mymap = graphAnalysis->dijkstra(path_node[0]);
+    map<int, lengthBetween::nodes_map::myNode*> mymap = graphAnalysis->dijkstra(path_node[0]);
     
         if(pluginProgress)
     {
@@ -189,51 +188,19 @@ bool shortestPath::run()
     //Vector to store path edge indices
     std::vector<unsigned int> mypath;
 
-    //Iterator for all nodes in graph
-    tlp::Iterator<tlp::node> *itnodes = graph->getNodes();
-
+    mypath = graphAnalysis->tracePath(mymap,path_node[1],path_node[0]);
+    
         if(pluginProgress)
     {
         pluginProgress->progress(3, STEPS);
-        pluginProgress->setComment("Selecting path.");
-    }
-    
-    //Select the found path
-    mypath = graphAnalysis->tracePath(mymap,path_node[1],path_node[0]);
-    tlp::ColorProperty * resetColor = graph->getLocalProperty<tlp::ColorProperty>("viewColor");
-    itnodes = graph->getNodes();
-    while(itnodes->hasNext()){
-        const tlp::node &node = itnodes->next();
-        for(unsigned int ID : mypath){
-            if(node.id == ID){
-                selectBool->setNodeValue(node, true);
-            }
-        }
-    }
-    delete itnodes;
-    
-    for(unsigned int i = 0; i<mypath.size(); i++){
-        const tlp::node &source = find_node(mypath[i]);
-        tlp::Iterator<tlp::edge> *itedges = graph->getOutEdges(source);
-        while(itedges->hasNext()){
-            const tlp::edge &edge = itedges->next();
-            if((i<mypath.size() && graph->target(edge).id == mypath[i+1]) || (i>0 && graph->target(edge).id == mypath[i-1]))
-                selectBool->setEdgeValue(edge, true);
-        }
-        delete itedges;
-    }
-    
-        if(pluginProgress)
-    {
-        pluginProgress->progress(4, STEPS);
         pluginProgress->setComment("Printing path length to terminal.");
     }
     
-    cout << "Distance between nodes: " << mypath.size()-1 << endl;
+    cout << mypath.size()-1 << endl;
 
     if(pluginProgress)
     {
-        pluginProgress->setComment("Shortest path found and selected.");
+        pluginProgress->setComment("Finished.");
         pluginProgress->progress(STEPS, STEPS);
     }
 

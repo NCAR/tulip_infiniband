@@ -16,8 +16,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
- * refine by Zhenzhen Liu on 6/21/17
  */
+
+#pragma once
 
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/TlpTools.h>
@@ -34,7 +35,7 @@ public:
     PLUGININFORMATION("Regularity Test",
                       "Todd Yoder",
                       "07/24/18",
-                      "Determines if a graph is regular.",
+                      "Determines if a graph is irregular or regular and of what degree.",
                       "alpha",
                       "Infiniband")
     
