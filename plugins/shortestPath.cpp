@@ -212,12 +212,12 @@ bool shortestPath::run()
     }
     delete itnodes;
     
-    for(unsigned int i = 0; i<mypath.size()-1; i++){
+    for(unsigned int i = 0; i<mypath.size(); i++){
         const tlp::node &source = find_node(mypath[i]);
         tlp::Iterator<tlp::edge> *itedges = graph->getOutEdges(source);
         while(itedges->hasNext()){
             const tlp::edge &edge = itedges->next();
-            if(graph->target(edge).id == mypath[i+1])
+            if((i<mypath.size() && graph->target(edge).id == mypath[i+1]) || (i>0 && graph->target(edge).id == mypath[i-1]))
                 selectBool->setEdgeValue(edge, true);
         }
         delete itedges;
