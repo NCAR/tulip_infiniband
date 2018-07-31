@@ -36,7 +36,7 @@ public:
     PLUGININFORMATION("Shortest Path Between Nodes",
                       "Zehzhen Liu, updated Todd Yoder",
                       "07/24/17, updated 07/24/18",
-                      "Finds the shortest path between two selected nodes",
+                      "Finds the shortest path between two selected nodes. Currently will select all edges between two nodes on the path.",
                       "alpha",
                       "Infiniband")
     
