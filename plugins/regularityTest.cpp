@@ -20,7 +20,6 @@
 
 #include <fstream>
 #include <algorithm>
-#include <vector>
 
 #include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
