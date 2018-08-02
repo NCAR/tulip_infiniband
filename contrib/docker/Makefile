@@ -45,7 +45,7 @@ else ifeq ($(OS),Mac)
 	docker run --network=host --cap-add=SYS_PTRACE --security-opt=apparmor:unconfined \
 	-it -h $(DOCKER_TAG) --name $(DOCKER_TAG) \
 	-e DISPLAY=$(IP):0 \
-	-v /tmp/.X11-unix:/tmp/.X11-unix
+	-v /tmp/.X11-unix:/tmp/.X11-unix -v ~:/home
 endif
 
 # Define makefile targets
